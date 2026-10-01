@@ -1,0 +1,44 @@
+{
+  "places": [
+    { "id": "police", "category": "Police", "name": "Secția 1 Poliție București", "address": "Strada Ion Neculce 6", "distance": "0.8 km", "query": "police station" },
+    { "id": "hospital", "category": "Hospital", "name": "Spitalul Universitar de Urgență", "address": "Splaiul Independenței 169", "distance": "1.4 km", "query": "hospital" },
+    { "id": "clinic", "category": "Clinic", "name": "Spitalul Clinic Filantropia", "address": "Bulevardul Ion Mihalache 11", "distance": "2.1 km", "query": "gynecology clinic" },
+    { "id": "pharmacy", "category": "Pharmacy", "name": "Farmacie (exemplu)", "address": "Calea Victoriei, București", "distance": "0.7 km", "query": "pharmacy" }
+  ],
+  "starterPosts": [
+    {
+      "id": 1,
+      "name": "Mara Ionescu",
+      "time": "12 min ago",
+      "location": "Bucharest · Aviatorilor",
+      "description": "Heading to a late study session. Walking the well-lit route and sharing my look in case we cross paths.",
+      "outfit": "Olive trench · cream knit · black loafers · canvas tote",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85",
+      "likes": 18,
+      "liked": false
+    },
+    {
+      "id": 2,
+      "name": "Ioana Popa",
+      "time": "38 min ago",
+      "location": "Bucharest · Cotroceni",
+      "description": "Quick check-in before I catch the tram home. My sister has my live route.",
+      "outfit": "Denim jacket · red scarf · white trainers",
+      "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=85",
+      "likes": 12,
+      "liked": false
+    }
+  ],
+  "emergencyNumbers": [
+    { "number": "112", "label": "Emergency services", "detail": "Police · ambulance · fire", "labelKey": "emergency.services", "detailKey": "emergency.servicesDetails" },
+    { "number": "0800 500 333", "label": "Domestic violence helpline", "detail": "Free, national ANES line", "labelKey": "emergency.domestic", "detailKey": "emergency.domesticDetails" }
+  ],
+  "abuseArticles": [
+    { "id": "financial", "title": "Financial abuse", "type": "Money and independence", "summary": "A person may control access to money, work, housing, benefits, or create debt in someone else’s name to limit their choices.", "sign": "You may be prevented from seeing accounts, required to account for every purchase, or pressured to hand over income.", "support": "If safe, consider talking with a specialist advocate from a device the other person cannot access." },
+    { "id": "physical", "title": "Physical abuse", "type": "Safety and bodily autonomy", "summary": "Physical abuse includes intentional force or threats of force that cause injury, pain, fear, or restrict movement.", "sign": "It can include hitting, pushing, restraint, blocking someone from leaving, or damaging belongings to intimidate.", "support": "If you are in immediate danger, call 112 when it is safe to do so. You deserve care without blame." },
+    { "id": "sexual", "title": "Sexual abuse", "type": "Consent", "summary": "Sexual contact or activity without freely given consent is abuse. Consent can be withdrawn at any time and is not implied by a relationship.", "sign": "Pressure, threats, unwanted touching, or taking advantage when someone cannot consent are not consent.", "support": "You can seek medical or emotional support whether or not you choose to report what happened." },
+    { "id": "emotional", "title": "Emotional and psychological abuse", "type": "Dignity and wellbeing", "summary": "Repeated humiliation, intimidation, threats, isolation, or blame can be used to undermine someone’s confidence and autonomy.", "sign": "You might feel afraid to disagree, cut off from people you trust, or constantly responsible for another person’s reactions.", "support": "A trusted person or domestic-violence advocate can help you think through options at your pace." },
+    { "id": "digital", "title": "Digital abuse and stalking", "type": "Privacy and control", "summary": "Technology can be used to monitor, threaten, impersonate, or repeatedly contact someone without their consent.", "sign": "Examples include account access without permission, location tracking, repeated unwanted messages, or sharing private images.", "support": "Use a safer device if possible before changing accounts or settings. Sudden changes can sometimes be noticed." },
+    { "id": "coercive", "title": "Coercive control", "type": "Patterns of control", "summary": "A repeated pattern of controlling behaviour can take away freedom, even when there is no physical assault.", "sign": "This can involve isolation, monitoring, threats, control of money, or dictating everyday choices.", "support": "You do not need to decide on a label before asking for support or making a safety plan." }
+  ]
+}
