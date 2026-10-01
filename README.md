@@ -19,6 +19,12 @@ npm run dev
 
 Open the Vite URL printed in the terminal (normally `http://localhost:5173`). The frontend proxies `/api` requests to the API on port 3001. Override that port with `API_PORT` if needed.
 
+## Deploy to Render
+
+The `render.yaml` Blueprint builds the React app and serves it with the Node API as one web service. Push this project to a GitHub repository, then in Render choose **New > Blueprint**, connect the repository, and apply the `render.yaml` configuration. Render builds with `npm ci && npm run build`, starts with `npm start`, and checks `/api/health`.
+
+The included Blueprint uses Render's free plan to avoid unexpected charges. Free services may sleep when idle and have cold starts; this prototype is not suitable for emergency response or reliable safety alerts.
+
 ## Included flows
 
 - Safety check-in status

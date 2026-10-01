@@ -1,6 +1,21 @@
 import { createServer } from 'node:http'
+import { createReadStream } from 'node:fs'
+import { stat } from 'node:fs/promises'
+import { extname, resolve, sep } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const port = Number(process.env.API_PORT || 3001)
+const port = Number(process.env.PORT || process.env.API_PORT || 3001)
+const distDirectory = resolve(fileURLToPath(new URL('../dist', import.meta.url)))
+const contentTypes = {
+  '.css': 'text/css; charset=utf-8',
+  '.html': 'text/html; charset=utf-8',
+  '.ico': 'image/x-icon',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+}
 const places = [
   { id: 'police', category: 'Police', name: 'Secția 1 Poliție București', address: 'Strada Ion Neculce 6', distance: '0.8 km', query: 'police station' },
   { id: 'hospital', category: 'Hospital', name: 'Spitalul Universitar de Urgență', address: 'Splaiul Independenței 169', distance: '1.4 km', query: 'hospital' },
@@ -16,6 +31,53 @@ function sendJson(response, status, body) {
     'Cache-Control': 'no-store',
   })
   response.end(JSON.stringify(body))
+}
+
+async function sendAppFile(request, response) {
+  let pathname
+  try {
+    pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname)
+  } catch {
+    sendJson(response, 400, { error: 'Invalid URL.' })
+    return
+  }
+
+  const candidate = resolve(distDirectory, `.${pathname}`)
+  if (candidate !== distDirectory && !candidate.startsWith(`${distDirectory}${sep}`)) {
+    sendJson(response, 404, { error: 'Not found.' })
+    return
+  }
+
+  let filePath = candidate
+  let fileInfo
+  try {
+    fileInfo = await stat(filePath)
+    if (fileInfo.isDirectory()) {
+      filePath = resolve(filePath, 'index.html')
+      fileInfo = await stat(filePath)
+    }
+  } catch {
+    filePath = resolve(distDirectory, 'index.html')
+    try {
+      fileInfo = await stat(filePath)
+    } catch {
+      sendJson(response, 404, { error: 'Application build not found.' })
+      return
+    }
+  }
+
+  if (!fileInfo.isFile()) {
+    sendJson(response, 404, { error: 'Not found.' })
+    return
+  }
+
+  const extension = extname(filePath)
+  response.writeHead(200, {
+    'Content-Type': contentTypes[extension] || 'application/octet-stream',
+    'Cache-Control': extension === '.html' ? 'no-cache' : 'public, max-age=31536000, immutable',
+  })
+  if (request.method === 'HEAD') response.end()
+  else createReadStream(filePath).pipe(response)
 }
 
 const server = createServer((request, response) => {
@@ -54,6 +116,16 @@ const server = createServer((request, response) => {
         sendJson(response, 400, { error: 'Request body must be valid JSON.' })
       }
     })
+    return
+  }
+
+  if (request.url.startsWith('/api/')) {
+    sendJson(response, 404, { error: 'Not found.' })
+    return
+  }
+
+  if (request.method === 'GET' || request.method === 'HEAD') {
+    sendAppFile(request, response)
     return
   }
 
