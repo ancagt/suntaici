@@ -1,9 +1,10 @@
-import { ArrowUpRight, Bell, ChevronDown, Clock3, HeartHandshake, Phone, ShieldAlert, Siren, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Bell, ChevronDown, Clock3, HeartHandshake, Menu, Phone, ShieldAlert, Siren, Sparkles, X } from 'lucide-react'
 import staticData from '../data.json'
 import { NAVIGATION_ITEMS } from '../constants'
 import { useLanguage } from '../LanguageContext'
 import type { TranslationKey } from '../translations'
 import { LanguageToggle } from './LanguageToggle'
+import { useState } from 'react'
 import type { Contact, View } from '../types'
 import { phoneHref } from '../utils'
 
@@ -21,9 +22,24 @@ export function Sidebar({ view, contact, profilePicture, onNavigate }: ChromePro
 
 export function Topbar({ view, profilePicture, onNavigate }: ChromeProps) {
   const { language, t } = useLanguage()
+  const [menuOpen, setMenuOpen] = useState(false)
   const today = new Intl.DateTimeFormat(language === 'ro' ? 'ro-RO' : 'en-GB', { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date())
   const pageLabel = t((view === 'home' ? 'topbar.home' : view === 'community' ? 'topbar.community' : view === 'report' ? 'topbar.report' : 'topbar.profile') as TranslationKey)
-  return <header className="topbar"><button className="mobile-brand" onClick={() => onNavigate('home')}><HeartHandshake size={20} /> SuntAici<span>.</span></button><div className="breadcrumb"><span>{today}</span><span className="breadcrumb-dot">/</span><strong>{pageLabel}</strong></div><LanguageToggle /><div className="top-actions"><button className="icon-button notification-button" aria-label={t('topbar.notifications')}><Bell size={18} /><i /></button><button className="header-avatar" onClick={() => onNavigate('profile')} aria-label={t('topbar.openProfile')}><img src={profilePicture} alt="" /></button></div></header>
+  return <>
+    <header className="topbar">
+      <button className="mobile-menu-button" type="button" aria-label={t(menuOpen ? 'nav.closeMenu' : 'nav.openMenu')} aria-expanded={menuOpen} aria-controls="mobile-menu-panel" onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button>
+      <button className="mobile-brand" onClick={() => onNavigate('home')}><HeartHandshake size={20} /> SuntAici<span>.</span></button>
+      <div className="breadcrumb"><span>{today}</span><span className="breadcrumb-dot">/</span><strong>{pageLabel}</strong></div>
+      <LanguageToggle />
+      <div className="top-actions"><button className="icon-button notification-button" aria-label={t('topbar.notifications')}><Bell size={18} /><i /></button><button className="header-avatar" onClick={() => onNavigate('profile')} aria-label={t('topbar.openProfile')}><img src={profilePicture} alt="" /></button></div>
+    </header>
+    {menuOpen && <>
+      <button className="mobile-menu-backdrop" type="button" aria-label={t('nav.closeMenu')} onClick={() => setMenuOpen(false)} />
+      <nav id="mobile-menu-panel" className="mobile-menu-panel" aria-label={t('nav.mobileMenu')}>
+        {NAVIGATION_ITEMS.map(({ id, labelKey, icon: Icon }) => <button className={`mobile-menu-link ${view === id ? 'active' : ''}`} key={id} onClick={() => { onNavigate(id); setMenuOpen(false) }}><Icon size={18} /><span>{t(labelKey)}</span></button>)}
+      </nav>
+    </>}
+  </>
 }
 
 export function QuickAccess({ contact, onNavigate }: Pick<ChromeProps, 'contact' | 'onNavigate'>) {
